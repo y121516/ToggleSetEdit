@@ -6,17 +6,20 @@ namespace ToggleSetEdit
 {
     static class Program
     {
+        const int DefaultTimeoutMs = 5 * 1000;
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             try
             {
                 using (var c = new Conversation())
                 {
-                    c.Start();
+                    var sessionID = Convert.ToInt32(args[0]);
+                    c.Start(sessionID, DefaultTimeoutMs);
                     Cad.InfoBarButton(InfoBar.SetEdit, !Cad.GetInfoBarButton(InfoBar.SetEdit));
                 }
             }
