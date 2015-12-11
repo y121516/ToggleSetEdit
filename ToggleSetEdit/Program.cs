@@ -20,19 +20,23 @@ namespace ToggleSetEdit
                 {
                     var sessionID = Convert.ToInt32(args[0]);
                     c.Start(sessionID, DefaultTimeoutMs);
-                    Cad.InfoBarButton(InfoBar.SetEdit, !Cad.GetInfoBarButton(InfoBar.SetEdit));
+                    try
+                    {
+                        Cad.InfoBarButton(InfoBar.SetEdit, !Cad.GetInfoBarButton(InfoBar.SetEdit));
+                    }
+                    catch (ApiException ex)
+                    {
+                        if (ex.ErrorOccurred(AppErrorType.MGDS, AppError.NoSetEdit))
+                        {
+                            return; // ignore this exception.
+                        }
+                        throw;
+                    }
                 }
             }
-            catch (ApiException ex)
+            catch (Exception ex)
             {
-                if (!ex.ErrorOccurred(AppErrorType.MGDS, AppError.NoSetEdit))
-                {
-                    MessageBox.Show(ex.Message + " in " + ex.ApiFunction);
-                }
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), ex.GetType().Name);
+                MessageBox.Show(ex.ToString(), ex.GetType().FullName, MessageBoxButtons.OK, MessageBoxIcon.Stop);
             }
         }
     }
