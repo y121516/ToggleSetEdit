@@ -18,7 +18,7 @@ namespace ToggleSetEdit
             {
                 using (var c = new Conversation())
                 {
-                    var sessionID = Convert.ToInt32(args[0]);
+                    var sessionID = args.Length > 0 ? Convert.ToInt32(args[0]) : Conversation.AnySession;
                     c.Start(sessionID, DefaultTimeoutMs);
                     try
                     {
