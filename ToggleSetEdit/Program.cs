@@ -25,11 +25,14 @@ namespace ToggleSetEdit
             }
             catch (ApiException ex)
             {
-                if (!ex.ErrorOccurred(AppErrorType.MGDS, AppError.NoSetEdit)) MessageBox.Show(ex.ApiFunction, ex.Message);
+                if (!ex.ErrorOccurred(AppErrorType.MGDS, AppError.NoSetEdit))
+                {
+                    MessageBox.Show(ex.Message + " in " + ex.ApiFunction);
+                }
             }
-            catch
+            catch(Exception ex)
             {
-                MessageBox.Show("なんらかの例外が発生しました");
+                MessageBox.Show(ex.ToString(), ex.GetType().Name);
             }
         }
     }
