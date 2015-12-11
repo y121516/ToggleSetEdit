@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using Informatix.MGDS;
 
 namespace ToggleSetEdit
 {
@@ -14,6 +12,22 @@ namespace ToggleSetEdit
         [STAThread]
         static void Main()
         {
+            try
+            {
+                using (var c = new Conversation())
+                {
+                    c.Start();
+                    Cad.InfoBarButton(InfoBar.SetEdit, !Cad.GetInfoBarButton(InfoBar.SetEdit));
+                }
+            }
+            catch (ApiException ex)
+            {
+                if (!ex.ErrorOccurred(AppErrorType.MGDS, AppError.NoSetEdit)) MessageBox.Show(ex.ApiFunction, ex.Message);
+            }
+            catch
+            {
+                MessageBox.Show("なんらかの例外が発生しました");
+            }
         }
     }
 }
